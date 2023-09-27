@@ -27,7 +27,10 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
         let animiId = requestAnimationFrame(anim)
         console.log('useLayoutEffect');
         setRunning(true);
-        return () => cancelAnimationFrame(animiId)     
+        return () => {
+            setRunning(false);
+            cancelAnimationFrame(animiId) ;
+        }   
     }, [running]);
     
     useEffect(() => {
