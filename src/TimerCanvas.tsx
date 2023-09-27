@@ -16,6 +16,7 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
 
     //add state for position
     const [position, setPosition] = React.useState<position>({x: 30, y: 30});
+    const [running, setRunning] = React.useState<boolean>(false);
 
 
     useLayoutEffect(() => {
@@ -23,8 +24,11 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
             setPosition( prevPosition => ({x: prevPosition.x + 1, y: prevPosition.y + 1}));
             requestAnimationFrame(anim);
         }
-        requestAnimationFrame(anim)
-    });
+        let animiId = requestAnimationFrame(anim)
+        console.log('useLayoutEffect');
+        setRunning(true);
+        return () => cancelAnimationFrame(animiId)     
+    }, [running]);
     
     useEffect(() => {
         const canvas = canvasRef.current;
