@@ -17,6 +17,7 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
     //add state for position
     const [loading, setLoading] = React.useState<boolean>(false);
     const [currTime, setTime] = React.useState<number>(Date.now());
+    const [buttonText, setButtonText] = React.useState<string>("Start");
 
     //to hold reference to animation frame with doesn't trigger rerender
     const animRef = useRef<number>(0);
@@ -24,7 +25,7 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
     const prevTime = useRef<number>(Date.now());
     
     const anim = (time : number) => {
-        console.log( "RR: " + running + " LL: " + loading + "animRef: " + animRef);
+        console.log( "RR: " + running.current + " LL: " + loading + "animRef: " + animRef);
         if (running.current) {
             setTime(Date.now());
         } else {
@@ -60,9 +61,10 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
             () => {
                 console.log('clicked');
                 running.current = !running.current;
+                setButtonText(running.current ? "Stop" : "Start");
             }
         }>
-            {running.current ? "Stop" : "Start"}
+            {buttonText}
         </button>
     </>);
 }; 
