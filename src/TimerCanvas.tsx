@@ -15,18 +15,20 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
     //add state for position
-    const [position, setPosition] = React.useState<position>({x: 30, y: 30});
     const [loading, setLoading] = React.useState<boolean>(false);
-    //const [running, setRunning] = React.useState<boolean>(false);
+    const [currTime, setTime] = React.useState<number>(Date.now());
 
     //to hold reference to animation frame with doesn't trigger rerender
     const animRef = useRef<number>(0);
     const running = useRef<boolean>(false);
+    const prevTime = useRef<number>(Date.now());
     
-    const anim = () => {
-        console.log( "RR: " + running + " LL: " + loading + "animRef: " + animRef); 
-        if(  running.current ) {
-            setPosition( prevPosition => ({x: prevPosition.x + 1, y: prevPosition.y + 1}));
+    const anim = (time : number) => {
+        console.log( "RR: " + running + " LL: " + loading + "animRef: " + animRef);
+        if (running.current) {
+            setTime(Date.now());
+        } else {
+            prevTime.current = Date.now();
         }
         animRef.current =  requestAnimationFrame(anim);
     }
@@ -46,15 +48,11 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx) {
-                ctx.fillStyle = 'rgb(200,0,0)';
-                ctx.fillRect(position.x, position.y, 50, 50);
-                ctx.fillStyle = 'rgba(0, 0, 200, 0.5)'; 
-                ctx.fillRect(position.x + 20, position.y + 20, 50, 50);
-                ctx.fillStyle = 'rgba(0, 0, 200, 0.5)';
-                ctx.fillRect(position.x + 30, position.y + 30, 50, 50);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillText( Math.round((currTime - prevTime.current) / 1000 ).toString(), 10, 50);
             }
         }
-    }, [position])
+    }, [currTime])
     
     return ( <>
         <canvas ref={canvasRef} width={width} height={height} />
@@ -64,7 +62,7 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
                 running.current = !running.current;
             }
         }>
-            {running ? 'Stop' : 'Start'}
+            {running.current ? "Stop" : "Start"}
         </button>
     </>);
 }; 
