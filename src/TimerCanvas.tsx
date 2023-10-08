@@ -40,7 +40,6 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
     }
 
     useEffect(() => {
-        console.log('start anim');
         animRef.current = requestAnimationFrame(anim);
         return () => {
             cancelAnimationFrame(animRef.current) ;
