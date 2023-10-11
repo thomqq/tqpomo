@@ -5,7 +5,7 @@ import TimerCanvas from './TimerCanvas';
 function App() {
   return (
     <div className="App">
-      <TimerCanvas width={500} height={300}/>
+      <TimerCanvas width={100} height={100}/>
     </div>
   );
 }

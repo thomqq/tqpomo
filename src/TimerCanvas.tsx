@@ -27,6 +27,8 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
 
         let delta = now - prevTime.current;
 
+        console.log("delta: " + delta + "time: " + time);
+
         if (running.current) {
             setRunningTime( prev => prev + delta);
         } 
@@ -48,13 +50,27 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
             const ctx = canvas.getContext('2d');
             if (ctx) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.fillText( Math.round((runningTime) / 1000 ).toString(), 10, 50);
+                let sec = Math.round((runningTime) / 1000 );
+                let base = 60; //60 sec = whole circle
+                let x = canvas.width / 2;
+                let y = canvas.height / 2;
+
+                ctx.beginPath();
+                ctx.lineWidth = 3;
+                ctx.arc(x, y, x - 3, 0, 2 * Math.PI);
+                ctx.stroke();
+                ctx.fillStyle = "#c82124"; //red
+                ctx.beginPath();
+                ctx.arc(x, y, x - 4, - Math.PI / 2 , Math.PI * (sec * 2 / base - 0.5));
+                ctx.lineTo(x, y)
+                ctx.fill();
             }
         }
     }, [runningTime])
     
     return ( <>
         <canvas ref={canvasRef} width={width} height={height} />
+        <br/>
         <button onClick={
             () => {
                 running.current = !running.current;
