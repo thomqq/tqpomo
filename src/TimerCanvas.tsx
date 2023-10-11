@@ -1,11 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 
-interface TimerCanvasProps {
-    width: number;
-    height: number;
+type item = {
+    sec: number;
 }
 
-const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
+type TimerCanvasProps = {
+    width: number,
+    height: number,
+    items: item[],
+}
+
+
+const TimerCanvas = ({ width, height, items }: TimerCanvasProps) => {
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -51,7 +57,7 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
             if (ctx) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 let sec = Math.round((runningTime) / 1000 );
-                let base = 60; //60 sec = whole circle
+                let base = items[0].sec; //sec = whole circle
                 let x = canvas.width / 2;
                 let y = canvas.height / 2;
 
