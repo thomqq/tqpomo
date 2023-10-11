@@ -74,7 +74,7 @@ const TimerCanvas = ({ width, height }: TimerCanvasProps) => {
         <button onClick={
             () => {
                 running.current = !running.current;
-                setButtonText(running.current ? "Stop" : "Start");
+                setButtonText(running.current ? "Stop" :  prevTime.current === 0 ? "Start" : "Continue");
             }
         }>
             {buttonText}
