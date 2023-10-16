@@ -18,7 +18,8 @@ const TimerCanvas = ({ width, height, items }: TimerCanvasProps) => {
 
     //add state for position
     const [runningTime, setRunningTime] = React.useState<number>(0);
-    const [buttonText, setButtonText] = React.useState<string>("Start");
+    const [buttonTextMain, setButtonTextMain] = React.useState<string>("Start");
+    const [buttonTextReset, setButtonTextReset] = React.useState<string>("Back to last");
 
     //to hold reference to animation frame with doesn't trigger rerender
     const animRef = useRef<number>(0);
@@ -101,10 +102,19 @@ const TimerCanvas = ({ width, height, items }: TimerCanvasProps) => {
         <button onClick={
             () => {
                 running.current = !running.current;
-                setButtonText(running.current ? "Stop" :  prevTime.current === 0 ? "Start" : "Continue");
+                setButtonTextMain(running.current ? "Stop" :  prevTime.current === 0 ? "Start" : "Continue");
             }
         }>
-            {buttonText}
+            {buttonTextMain}
+        </button>
+        <button onClick={
+            () => {
+                running.current = false;
+                setButtonTextReset("Back to last");
+                setRunningTime( calcSecToPosition(lastItemPosition.current, items) * 1000);
+            }
+        }>
+            {buttonTextReset}
         </button>
     </>);
 }; 
@@ -128,5 +138,13 @@ function calcItemPosition(sec: number, items: item[]) {
         }
     }
     return items.length;
+}
+
+function calcSecToPosition(pos: number, items: item[]) {
+    let sum = 0;
+    for (let i = 0; i < pos; i++) {
+        sum += items[i].sec;
+    }
+    return sum;
 }
 
